@@ -1,27 +1,27 @@
-version: '2.2'
+version: "2.2"
 
 services:
   app:
     build: ./app
-    expose:
-      - 5005
-
-  webserver:
-    build: ./webserver
-    depends_on:
-      - app
     ports:
-      - "8088:8088"
-    network_mode: "host"
+      - "5005:5005"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/test_db
+    depends_on:
+      - database
 
   database:
     build: ./database
+    ports:
+      - "5432:5432"
     environment:
-      - POSTGRES_USER=hello_world_user
-      - POSTGRES_PASSWORD=hello_world_password
-      - POSTGRES_DB=hello_world_db
-    volumes:
-      - db-data:/var/lib/postgresql/data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_db
 
-volumes:
-  db-data:
+  webserver:
+    build: ./webserver
+    ports:
+      - "8088:8088"
+    depends_on:
+      - app
