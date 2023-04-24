@@ -11,7 +11,8 @@ services:
     depends_on:
       - app
     ports:
-      - "8088:80"
+      - "8088:8088"
+    network_mode: "host"
 
   database:
     build: ./database
