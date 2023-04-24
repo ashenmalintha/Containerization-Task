@@ -5,6 +5,9 @@ services:
     build: ./app
     ports:
       - "5000:5000"
+    networks:
+      my_network:
+        ipv4_address: 172.25.0.2
 
   database:
     build: ./database
@@ -21,3 +24,14 @@ services:
       - "8088:8088"
     depends_on:
       - app
+    environment:
+      APP_CONTAINER_IP: 172.25.0.2
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.25.0.0/16
+          gateway: 172.25.0.1
