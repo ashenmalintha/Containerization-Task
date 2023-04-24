@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  app:
+    build: ./app
+    expose:
+      - 5005
+
+  webserver:
+    build: ./webserver
+    depends_on:
+      - app
+    ports:
+      - "8088:80"
+
+  database:
+    build: ./database
+    environment:
+      - POSTGRES_USER=hello_world_user
+      - POSTGRES_PASSWORD=hello_world_password
+      - POSTGRES_DB=hello_world_db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
